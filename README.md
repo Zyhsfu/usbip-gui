@@ -31,3 +31,5 @@ yarn lint
 ### Customize configuration
 
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+nodejs@14.18.3
