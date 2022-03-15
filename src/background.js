@@ -1,20 +1,27 @@
 'use strict'
-
-import { app, protocol, BrowserWindow } from 'electron'
+import { app, protocol, BrowserWindow,ipcMain} from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+import {exec} from 'child_process'
 const isDevelopment = process.env.NODE_ENV !== 'production'
+const electron = require('electron')
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 
+const Menu = electron.Menu
+let win
 async function createWindow() {
+  //隐藏菜单栏
+  // Menu.setApplicationMenu(null)
   // Create the browser window.
-  const win = new BrowserWindow({
+    win = new BrowserWindow({
     width: 800,
     height: 600,
+    resizable: false,
+    frame: false,
     webPreferences: {
       
       // Use pluginOptions.nodeIntegration, leave this alone
@@ -79,3 +86,19 @@ if (isDevelopment) {
     })
   }
 }
+//命令行
+let usbipList = 'usbip.exe list -l'
+//查看本机可绑定的USB设备
+let cmdPath = 'usbip'
+//usbip的相对路径
+let workerProcess
+
+//主进程监听最小化窗口事件
+ipcMain.on('minus-window',()=>{
+  win.minimize();
+})
+
+//主进程监听关闭窗口事件
+ipcMain.on('close-window',()=>{
+  win.close()
+})
