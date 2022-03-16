@@ -3,6 +3,7 @@ import { app, protocol, BrowserWindow,ipcMain} from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import {exec} from 'child_process'
+import { stdout } from 'process'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const electron = require('electron')
 
@@ -87,7 +88,7 @@ if (isDevelopment) {
   }
 }
 //命令行
-let usbipList = 'usbip.exe list -l'
+let usbipList = 'usbip.exe list -r'
 //查看本机可绑定的USB设备
 let cmdPath = 'usbip'
 //usbip的相对路径
@@ -101,4 +102,13 @@ ipcMain.on('minus-window',()=>{
 //主进程监听关闭窗口事件
 ipcMain.on('close-window',()=>{
   win.close()
+})
+
+//监听搜索usb设备的事件
+ipcMain.on('search-usbs',(event,args)=>{
+  // console.log(args)
+  let cmd = usbipList + ' ' +args.ip
+  exec(cmd,{cwd:cmdPath},(error,stdout,stderr)=>{
+    event.reply('stdout',stdout)
+  })
 })

@@ -1,5 +1,16 @@
 <template>
   <div id="app">
+    <AddHost :addNewHost="addNewHost"/>
+    <a-divider ></a-divider>
+    <div class="mid">
+      <HostsList 
+        :hosts="hosts" 
+        :addNewHost="addNewHost"
+        :hostsDelete="hostsDelete"
+        :hostsEdit="hostsEdit"
+      />
+      <UsbList/>
+    </div>
     <a-icon 
       class="closeWindow"
       type="close-circle" 
@@ -13,19 +24,54 @@
       @click="minusWindow"
     />
     <SettingDrawer/>
-    <!-- <Layout/> -->
   </div>
 </template>
 
 <script>
-// import Layout from './components/Layout.vue'
+import UsbList from './components/UsbList.vue'
+import AddHost from './components/AddHost.vue'
 import SettingDrawer from './components/SettingDrawer.vue'
+import HostsList from './components/HostsList.vue'
 export default {
   name: 'App',
   components:{
-    SettingDrawer
+    SettingDrawer,
+    AddHost,
+    HostsList,
+    UsbList,
+  },
+  data(){
+    return{
+      hosts:[
+        {id:'001',name:'UOS虚拟机',ip:'192.168.17.128',port:3240},
+        {id:'002',name:'test',ip:'127.0.0.2',port:'3240'},
+      ],
+      usbs:[
+        {busid:'1-11',name:'UOS虚拟机',ip:'192.168.17.128',port:3240,dsp:"kindstom"},
+      ]
+    }
   },
   methods:{
+    //增加新主机
+    addNewHost(host){
+      this.hosts.push(host)
+    },
+    //编辑主机
+    hostsEdit(id,newHost){
+      this.hosts.forEach((host)=>{
+        if(host.id === id){
+          host.name = newHost.name
+          host.ip = newHost.ip
+          host.port = newHost.port
+        }
+      })
+    },
+    //删除主机
+    hostsDelete(id){
+      this.hosts = this.hosts.filter((host)=>{
+        return host.id !== id
+      })
+    },
     //发送关闭窗口事件
     closeWindow(){
       window.ipcRenderer.send('close-window')
@@ -40,11 +86,16 @@ export default {
 }
 </script>
 
-<style> 
+<style>
   body {
     -webkit-app-region: drag;
   }
-
+  .mid{
+    width: 800px;
+    height: 430px;
+    -webkit-app-region: no-drag;
+    /* background-color: #e05353; */
+  }
   .closeWindow{
     position: absolute;
     top:10px;

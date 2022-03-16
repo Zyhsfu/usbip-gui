@@ -1,25 +1,27 @@
 <template>
-  <div id="setting">
-    <a-icon 
+  <div>
+    <a-icon
+      id="setting" 
       type="setting" 
       theme="filled"
-      :style="{fontSize:'20px'}"
+      :style="{fontSize:'30px'}"
       @click="openSettingDrawer"  
 
     />
     <a-drawer
+      class="settingDrawer"
       title="设置"
       placement="right"
       :visible="visible"
       @close="closeSettingDrawer"
     >
-
     </a-drawer>
   </div>
 </template>
 
 <script>
 export default {
+  name:'SettingDrawer',
   data(){
     return{
       visible:false,
@@ -37,6 +39,9 @@ export default {
 </script>
 
 <style>
+  .settingDrawer{
+    -webkit-app-region: no-drag;
+  }
   #setting{
     position: absolute;
     left: 10px;
