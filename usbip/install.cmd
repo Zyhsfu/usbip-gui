@@ -9,8 +9,6 @@ set _USBIP_EXE="%~dp0usbip.exe"
 set _USBIP_CERT="%~dp0usbip_test.pfx"
 set _CERTMGR="%~dp0certmgr.exe"
 
-@REM @REM 启动测试模式
-bcdedit.exe /set TESTSIGNING ON
 
 @REM 安装证书
 
