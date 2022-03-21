@@ -34,7 +34,7 @@ export default {
     closeSettingDrawer(){
       this.visible = false;
     }
-  }
+  },
 }
 </script>
 

@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="hostList"
-
-  >
+  <div class="hostList">
     <a-List>
       <Host 
         v-for="host in hosts" 
@@ -10,6 +7,9 @@
         :host="host"
         :hostsDelete="hostsDelete"
         :hostsEdit="hostsEdit"
+        :UsbAdd="UsbAdd"
+        :usbSelectTrue="usbSelectTrue"
+        :usbSelected="usbSelected"
       />
     </a-List>
   </div>
@@ -22,7 +22,14 @@ export default {
   components:{
     Host,
   },
-  props:['hosts','hostsDelete','hostsEdit'],
+  props:[
+    'hosts',
+    'hostsDelete',
+    'hostsEdit',
+    'UsbAdd',
+    'usbSelectTrue',
+    'usbSelected'
+    ],
 }
 </script>
 

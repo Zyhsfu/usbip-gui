@@ -8,8 +8,18 @@
         :addNewHost="addNewHost"
         :hostsDelete="hostsDelete"
         :hostsEdit="hostsEdit"
+        :UsbAdd="UsbAdd"
+        :usbSelectTrue="usbSelectTrue"
+        :usbSelected="usbSelected"
       />
-      <UsbList/>
+      <UsbList 
+        :Usbs="Usbs"
+        :UsbDelete="UsbDelete"
+        :UsbPause="UsbPause"
+        :UsbPlay="UsbPlay"
+        :usbSelectFalse="usbSelectFalse"
+        :usbSelected="usbSelected"
+      />
     </div>
     <a-icon 
       class="closeWindow"
@@ -42,13 +52,12 @@ export default {
   },
   data(){
     return{
-      hosts:[
-        {id:'001',name:'UOS虚拟机',ip:'192.168.17.128',port:3240},
-        {id:'002',name:'test',ip:'127.0.0.2',port:'3240'},
-      ],
-      usbs:[
-        {busid:'1-11',name:'UOS虚拟机',ip:'192.168.17.128',port:3240,dsp:"kindstom"},
-      ]
+      usbSelected:[],
+      vis:[],
+      num:0,
+      hosts:[],
+      ps:[],
+      Usbs:[],
     }
   },
   methods:{
@@ -79,9 +88,52 @@ export default {
     //发送最小化窗口事件
     minusWindow(){
       window.ipcRenderer.send('minus-window')
-    }
-
-
+    },
+    UsbDelete(id){
+      this.Usbs = this.Usbs.filter((Usb)=>{
+        return Usb.id !== id
+      })
+    },
+    UsbPause(id){
+      let thisP
+      this.Usbs.forEach((Usb)=>{
+        if(Usb.id === id) thisP = Usb.p
+      })
+      // console.log(thisP)
+      if(thisP !== null){
+        window.ipcRenderer.send('UsbPause',thisP)
+      }
+      this.Usbs.forEach((Usb)=>{
+        if(Usb.id === id){
+          this.vis[Usb.p] = 0
+          Usb.p = null
+        }
+      })
+    },
+    UsbPlay(id){
+      // console.log(this.vis[1])
+      window.ipcRenderer.send('UsbPlay',id)
+      this.Usbs.forEach((Usb)=>{
+        if(Usb.id === id){
+          for(let i = 0;i <= 100;i ++){
+            if(!this.vis[i]){
+              Usb.p = i
+              this.vis[i] = 1
+              break
+            }
+          }
+        }
+      })
+    },
+    UsbAdd(Usb){
+      this.Usbs.push(Usb)
+    },
+    usbSelectTrue(id){
+        this.usbSelected[id] = 1
+    },
+    usbSelectFalse(id){
+        this.usbSelected[id] = 0
+    },
   }
 }
 </script>

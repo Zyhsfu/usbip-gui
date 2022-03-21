@@ -88,7 +88,7 @@ if (isDevelopment) {
   }
 }
 //命令行
-let usbipList = 'usbip.exe list -r'
+let usbip = 'usbip.exe'
 //查看本机可绑定的USB设备
 let cmdPath = 'usbip'
 //usbip的相对路径
@@ -107,8 +107,28 @@ ipcMain.on('close-window',()=>{
 //监听搜索usb设备的事件
 ipcMain.on('search-usbs',(event,args)=>{
   // console.log(args)
-  let cmd = usbipList + ' ' +args.ip
+  let cmd = usbip + ' ' +'--tcp-port'+ ' ' + args.port + ' ' + 'list -r' + ' ' +args.ip
   exec(cmd,{cwd:cmdPath},(error,stdout,stderr)=>{
     event.reply('stdout',stdout)
+    // console.log(stdout)
   })
+})
+
+//监听断开usb设备的事件
+ipcMain.on('UsbPause',(event,args)=>{
+  let cmd = usbip + ' ' + 'detach' + ' ' + '-p' + ' ' + args
+  // console.log(args)
+  exec(cmd,{cwd:cmdPath})
+})
+
+//监听连接usb设备的事件
+ipcMain.on('UsbPlay',(event,args)=>{
+  let ipReg = /[^:]+/g
+  let portReg = /\d{1,5}/
+  let idReg = /\d+-.+/
+  let IP = args.match(ipReg)[0]
+  let PORT = args.match(ipReg)[1].match(portReg).toString()
+  let BUSID = args.match(ipReg)[1].match(idReg).toString()
+  let cmd = usbip + ' ' +'--tcp-port'+ ' ' + PORT + ' ' + 'attach' + ' ' + '-r' + ' ' + IP + ' ' + '-b' + ' ' + BUSID
+  exec(cmd,{cwd:cmdPath})
 })
