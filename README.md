@@ -32,4 +32,4 @@ yarn lint
 
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
-nodejs@14.18.3
+nodejs@<17
