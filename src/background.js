@@ -5,7 +5,10 @@ import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import {exec} from 'child_process'
 const isDevelopment = process.env.NODE_ENV !== 'production'
-
+const sudo = require('sudo-prompt')
+const options = {
+  name:'usbip'
+}
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
@@ -81,11 +84,23 @@ if (isDevelopment) {
   }
 }
 
-ipcMain.on('UsbsList',()=>{
-  exec('usbip list -l',{},(error,stdout,stderr)=>{
-    if(error) console.log(error)
-    if(stdout) console.log(stdout)
-    if(stderr) console.log(stderr)
+ipcMain.on('UsbsList',(event)=>{
+  exec('usbip list -l',{},(error,stdout)=>{
+    event.reply('UsbsResult',stdout)
   })  
 })
 
+ipcMain.on('UsbBind',(event,args)=>{
+  sudo.exec('usbip bind -b '+ args,options)
+})
+
+ipcMain.on('UsbBack',(event,args)=>{
+  sudo.exec('usbip unbind -b '+ args,options)
+})
+
+ipcMain.on('usbipd',(event,args)=>{
+  sudo.exec('usbipd --tcp-port '+ args + ' -D + modprobe usbip-host + modprobe usbip-core + modprobe vhci-hcd' ,options)
+  // sudo.exec('modprobe usbip-host',options)
+  // sudo.exec('modprobe usbip-core',options)
+  // sudo.exec('modprobe vhci-hcd',options)
+})
