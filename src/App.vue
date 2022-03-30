@@ -27,6 +27,9 @@
         :UsbBack="UsbBack"
       />
     </div>
+    <div id="button-bottom">
+      <FileUpload/>
+    </div>
   </div>
 </template>
 
@@ -35,6 +38,7 @@ import UsbsList from './components/UsbsList.vue'
 import UsbsDisplay from './components/UsbsDisplay.vue'
 import UsbsBindDisplay from './components/UsbsBindDisplay.vue'
 import ExecUsbipd from './components/ExecUsbipd.vue'
+import FileUpload from './components/FileUpload.vue'
 export default {
   name: 'App',
   data(){
@@ -53,6 +57,7 @@ export default {
     UsbsDisplay,
     UsbsBindDisplay,
     ExecUsbipd,
+    FileUpload,
   },
   methods:{
     Init(){
@@ -83,6 +88,12 @@ export default {
     height: 35px;
     /* border: 1px solid #e8e8e8;
     border-radius: 4px; */
+  }
+  #button-bottom{
+    width: 590px;
+    height: 35px;
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
   }
   #display{
     width: 590px;

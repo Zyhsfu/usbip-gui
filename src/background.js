@@ -4,16 +4,20 @@ import { app, protocol, BrowserWindow, ipcMain } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import {exec} from 'child_process'
+
+// const express = require('express');
+
+// const unoconv = require('unoconv-server');
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const sudo = require('sudo-prompt')
 const options = {
   name:'usbip'
 }
+// const UNO = express();
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
-
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
@@ -100,7 +104,11 @@ ipcMain.on('UsbBack',(event,args)=>{
 
 ipcMain.on('usbipd',(event,args)=>{
   sudo.exec('usbipd --tcp-port '+ args + ' -D + modprobe usbip-host + modprobe usbip-core + modprobe vhci-hcd' ,options)
-  // sudo.exec('modprobe usbip-host',options)
-  // sudo.exec('modprobe usbip-core',options)
-  // sudo.exec('modprobe vhci-hcd',options)
 })
+
+ipcMain.on('to-pdf',(event,file)=>{
+  console.log(file)
+})
+
+// UNO.use('/unoconv', unoconv());
+// UNO.listen(3000);
