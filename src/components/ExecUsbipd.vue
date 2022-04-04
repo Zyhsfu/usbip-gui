@@ -1,21 +1,32 @@
 <template>
   <div id="Usbipd">
-    <a-button 
-      block
+    <a-switch
       type="primary"
       @click="usbipd"
+      v-model="checked"
     >启动服务端
-    </a-button>
+    </a-switch>
   </div>
 </template>
 
 <script>
 export default {
   name:'ExecUsbipd',
-  props:['port'],
+  data(){
+    return{
+      checked:false,
+    }
+  },
   methods:{
     usbipd(){
-      window.ipcRenderer.send('usbipd',this.port)
+      if(this.checked){
+        window.ipcRenderer.send('usbipd-on')
+        // console.log("on")
+      }
+      else{
+        window.ipcRenderer.send('usbipd-off')
+        // console.log("off")
+      }
     },
   }
 }
@@ -23,8 +34,7 @@ export default {
 
 <style>
   #Usbipd{
-    height:35px;
-    width: 250px;
+    margin-top:10px;
     float:right
   }
 </style>

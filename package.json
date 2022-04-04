@@ -14,11 +14,10 @@
   "main": "background.js",
   "dependencies": {
     "ant-design-vue": "^1.7.8",
+    "axios": "^0.26.1",
     "core-js": "^3.8.3",
-    "express": "^4.17.3",
-    "reqwest": "^2.0.5",
+    "get-file-object-from-local-path": "^1.0.2",
     "sudo-prompt": "^9.2.1",
-    "unoconv-server": "^0.2.7",
     "vue": "^2.6.14"
   },
   "devDependencies": {

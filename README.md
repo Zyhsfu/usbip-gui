@@ -1,31 +1,15 @@
-# usbip-gui
-
-## 删库跑路
-
-## 服务外包大赛团队项目
+# usbip-gui-linux
 
 ## Project setup
 
 ```
-yarn install
-```
-
-### Compiles and hot-reloads for development
-
-```
-yarn electron:serve
+npm install
 ```
 
 ### Compiles and minifies for production
 
 ```
-yarn electron:build
-```
-
-### Lints and fixes files
-
-```
-yarn lint
+npm run electron:build
 ```
 
 ### Customize configuration

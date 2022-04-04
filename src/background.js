@@ -5,32 +5,39 @@ import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import {exec} from 'child_process'
 
-// const express = require('express');
-
-// const unoconv = require('unoconv-server');
+const electron = require('electron')
+const Menu = electron.Menu
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const sudo = require('sudo-prompt')
 const options = {
   name:'usbip'
 }
-// const UNO = express();
-// Scheme must be registered before the app is ready
+
+//关闭菜单栏
+Menu.setApplicationMenu(null)
+
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 615,
+    height: 450,
+    resizable: false,
+    // frame: false,
+
     webPreferences: {
       
+      webSecurity: false,
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION
     }
   })
+  //关闭控制台
+  // win.webContents.openDevTools()
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -102,13 +109,23 @@ ipcMain.on('UsbBack',(event,args)=>{
   sudo.exec('usbip unbind -b '+ args,options)
 })
 
-ipcMain.on('usbipd',(event,args)=>{
-  sudo.exec('usbipd --tcp-port '+ args + ' -D + modprobe usbip-host + modprobe usbip-core + modprobe vhci-hcd' ,options)
+//启动usbipd
+ipcMain.on('usbipd-on',()=>{
+  sudo.exec('systemctl start usbipd' ,options)
 })
 
-ipcMain.on('to-pdf',(event,file)=>{
-  console.log(file)
+//关闭usbipd
+ipcMain.on('usbipd-off',()=>{
+  sudo.exec('systemctl stop usbipd' ,options)
 })
 
-// UNO.use('/unoconv', unoconv());
-// UNO.listen(3000);
+ipcMain.on('to-pdf',(event,path)=>{
+  exec('unoconv -f pdf ' + path,{},(error,stdout,stderr)=>{
+    event.reply('pdf-reply')
+  })
+})
+
+//删除临时产生的pdf文件
+ipcMain.on('delete-pdf',(event,args)=>{
+  exec('rm '+args)
+})

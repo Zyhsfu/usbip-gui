@@ -1,7 +1,6 @@
 <template>
   <div id="UsbsList">
     <a-button
-      block
       type="primary"
       @click="execUsbsList"
     >查看本机USB设备</a-button>
@@ -24,7 +23,7 @@ export default {
           let regBusid = /\d+-\d+\.*\d*/
           let regName = /[A-Za-z ]+/
           let Busid = res[i].match(regBusid)[0]
-          let name = res1[i].match(regName)
+          let name = res1[i].match(regName)[0]
           const Usb = {id:Busid,name:name,bind:false}
           this.UsbAdd(Usb)
         }
@@ -37,8 +36,7 @@ export default {
 
 <style>
   #UsbsList{
-    height:35px;
-    width: 250px;
+    margin-top:5px;
     float:left
   }
 </style>
