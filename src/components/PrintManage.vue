@@ -101,10 +101,10 @@ export default {
       secondPageNumber:undefined,
       copies:1,
       Visible:false,
-      fileList: [],
+      fileList:[],
       uploading: false,
       printerjson:undefined,
-      tempPath:undefined,
+      newPath:undefined,
       formerPath:undefined,
     }
   },
@@ -125,12 +125,10 @@ export default {
     beforeUpload(file){
       this.formerPath = file.path
       const path = file.path.split(".")
-      const newPath = path[0] + '.pdf'
-      this.tempPath = newPath
+      this.newPath = path[0] + '.pdf'
       window.ipcRenderer.send('to-pdf',file.path)
-
       window.ipcRenderer.once('pdf-reply',()=>{
-        const fileData = new LocalFileData(newPath)
+        const fileData = new LocalFileData(this.newPath)
         const newFile = constructFileFromLocalFileData(fileData)
         this.fileList = [...this.fileList,newFile]
         return false
@@ -138,7 +136,6 @@ export default {
     },
     handleUpload(){
       const { fileList } = this;
-
       const formData = new FormData();
       fileList.forEach(file => {
         formData.append('files[]', file);
@@ -160,23 +157,20 @@ export default {
         data: formData,
       })
         .then(()=>{
-          this.fileList = [];
           this.uploading = false;
+          this.fileList = [];
           this.$message.success('upload successfully.');
-          this.init()
+          if(this.formerPath != this.newPath){
+            window.ipcRenderer.send('delete-pdf',this.newPath)
+          }
+          this.formerPath = undefined
+          this.newPath = undefined
+          this.printerName = undefined
         })
         .catch(()=>{
           this.uploading = false;
           this.$message.error('upload failed.');
-          this.init()
         })
-    },
-    init(){
-      if(this.tempPath != this.formerPath)
-        window.ipcRenderer.send('delete-pdf',this.tempPath)
-      this.tempPath = undefined
-      this.formerPath = undefined
-      this.printerName = undefined
     },
     searchPrinter(){
       axios({
