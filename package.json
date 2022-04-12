@@ -12,17 +12,6 @@
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
   },
-
-  "build": {
-    "linux": {
-      "target": [
-        {
-          "target": "arm64"
-        }
-      ]
-    }
-  },
-
   "main": "background.js",
   "dependencies": {
     "ant-design-vue": "^1.7.8",
