@@ -1,6 +1,11 @@
 # USBIP-GUI
 
+# 简介
+## For Linux
+![](/images/Picture1.png)
 
+## For Windows
+![](/images/Picture2.png)
 # 🔧配置开发环境
 ### ⚙️安装依赖
 
