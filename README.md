@@ -1,8 +1,5 @@
-# usbip-gui
+# USBIP-GUI
 
-## 删库跑路
-
-## 服务外包大赛团队项目
 
 ## Project setup
 
@@ -27,9 +24,7 @@ yarn electron:build
 ```
 yarn lint
 ```
+## 版本要求
 
-### Customize configuration
+nodejs<17
 
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
-nodejs@<17
