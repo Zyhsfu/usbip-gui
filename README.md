@@ -1,19 +1,19 @@
 # USBIP-GUI
 
 
-## Project setup
+## 🔧Project setup
 
 ```
 yarn install
 ```
 
-### Compiles and hot-reloads for development
+### 🚗Compiles and hot-reloads for development
 
 ```
 yarn electron:serve
 ```
 
-### Compiles and minifies for production
+### 📦️Compiles and minifies for production
 
 ```
 yarn electron:build
